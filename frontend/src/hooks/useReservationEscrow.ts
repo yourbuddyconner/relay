@@ -48,11 +48,23 @@ export function useReservationEscrow() {
   // Read listing details
   const useListing = (listingId: string) => {
     const { data, isLoading, error } = useReadContract({
-      address: addresses.reservationEscrow,
+      address: addresses?.reservationEscrow,
       abi,
       functionName: 'listings',
       args: [listingId as `0x${string}`],
-    })
+      query: {
+        enabled: !!addresses && !!listingId,
+      }
+    }) as {
+      data: [
+        string, // seller
+        bigint, // price
+        bigint, // expiry
+        number  // status
+      ] | undefined,
+      isLoading: boolean,
+      error: Error | null
+    }
 
     if (!data) return { listing: null, isLoading, error }
 
@@ -74,11 +86,23 @@ export function useReservationEscrow() {
   // Read order details
   const useOrder = (orderId: string) => {
     const { data, isLoading, error } = useReadContract({
-      address: addresses.reservationEscrow,
+      address: addresses?.reservationEscrow,
       abi,
       functionName: 'orders',
       args: [orderId as `0x${string}`],
-    })
+      query: {
+        enabled: !!addresses && !!orderId,
+      }
+    }) as {
+      data: [
+        string, // buyer
+        string, // listingId
+        bigint, // coordinationTime
+        number  // status
+      ] | undefined,
+      isLoading: boolean,
+      error: Error | null
+    }
 
     if (!data) return { order: null, isLoading, error }
 

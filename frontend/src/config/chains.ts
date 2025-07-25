@@ -1,4 +1,5 @@
 import { defineChain } from 'viem'
+import { mainnet, sepolia } from 'viem/chains'
 
 export const localhost = defineChain({
   id: 31337,
@@ -19,8 +20,42 @@ export const localhost = defineChain({
   testnet: true,
 })
 
-// Contract addresses - will be loaded from deployment file
+// Export supported chains based on environment
+export const supportedChains = (() => {
+  const chainId = process.env.NEXT_PUBLIC_CHAIN_ID ? parseInt(process.env.NEXT_PUBLIC_CHAIN_ID) : 31337
+  
+  switch (chainId) {
+    case 1:
+      return [mainnet]
+    case 11155111:
+      return [sepolia]
+    case 31337:
+      return [localhost]
+    default:
+      console.warn(`Unsupported chain ID: ${chainId}, defaulting to localhost`)
+      return [localhost]
+  }
+})()
+
+// Get the active chain based on environment
+export const activeChain = supportedChains[0]
+
+// Contract addresses - will be loaded from deployment file or environment variables
 export const getContractAddresses = () => {
+  // Production/staging addresses from environment variables
+  if (process.env.NEXT_PUBLIC_RESERVATION_MARKETPLACE_ADDRESS) {
+    return {
+      reservationMarketplace: process.env.NEXT_PUBLIC_RESERVATION_MARKETPLACE_ADDRESS as `0x${string}`,
+      reservationEscrow: process.env.NEXT_PUBLIC_RESERVATION_ESCROW_ADDRESS as `0x${string}`,
+      reservationVerifier: process.env.NEXT_PUBLIC_RESERVATION_VERIFIER_ADDRESS as `0x${string}`,
+      mockEmailVerifierOpenTable: process.env.NEXT_PUBLIC_EMAIL_VERIFIER_OPENTABLE_ADDRESS as `0x${string}` || '0x0000000000000000000000000000000000000000',
+      mockEmailVerifierResy: process.env.NEXT_PUBLIC_EMAIL_VERIFIER_RESY_ADDRESS as `0x${string}` || '0x0000000000000000000000000000000000000000',
+      mockEmailVerifierCancellation: process.env.NEXT_PUBLIC_EMAIL_VERIFIER_CANCELLATION_ADDRESS as `0x${string}` || '0x0000000000000000000000000000000000000000',
+      mockEmailVerifierBooking: process.env.NEXT_PUBLIC_EMAIL_VERIFIER_BOOKING_ADDRESS as `0x${string}` || '0x0000000000000000000000000000000000000000',
+    }
+  }
+  
+  // Development addresses from deployment file
   if (process.env.NODE_ENV === 'development') {
     try {
       // Dynamically load deployment file in development
@@ -40,6 +75,7 @@ export const getContractAddresses = () => {
     }
   }
   
-  // Production addresses would go here
+  // No addresses found
+  console.warn('No contract addresses found. Please set environment variables or deploy contracts.')
   return null
 } 

@@ -5,11 +5,6 @@ import marketplaceAbi from '@/contracts/abis/ReservationMarketplace.json'
 
 export function useReservationMarketplace() {
   const addresses = getContractAddresses()
-  
-  if (!addresses) {
-    throw new Error('Contract addresses not found. Please deploy contracts first.')
-  }
-
   const abi = marketplaceAbi.abi
 
   // Write functions
@@ -27,23 +22,32 @@ export function useReservationMarketplace() {
     hash: createOrderTxHash,
   })
 
-  // Read functions
+  // Read functions - only execute if addresses are available
   const { data: listingFee } = useReadContract({
-    address: addresses.reservationMarketplace,
+    address: addresses?.reservationMarketplace,
     abi,
     functionName: 'LISTING_FEE_BPS',
+    query: {
+      enabled: !!addresses,
+    }
   }) as { data: bigint | undefined }
 
   const { data: successFee } = useReadContract({
-    address: addresses.reservationMarketplace,
+    address: addresses?.reservationMarketplace,
     abi,
     functionName: 'SUCCESS_FEE_BPS',
+    query: {
+      enabled: !!addresses,
+    }
   }) as { data: bigint | undefined }
 
   const { data: buyerDepositMultiplier } = useReadContract({
-    address: addresses.reservationMarketplace,
+    address: addresses?.reservationMarketplace,
     abi,
     functionName: 'BUYER_DEPOSIT_MULTIPLIER',
+    query: {
+      enabled: !!addresses,
+    }
   }) as { data: bigint | undefined }
 
   // Helper functions
@@ -59,6 +63,10 @@ export function useReservationMarketplace() {
 
   // Contract interaction functions
   const list = async (proof: any, price: string, expiry: number) => {
+    if (!addresses) {
+      throw new Error('Contract addresses not configured. Please check your environment variables.')
+    }
+    
     const priceWei = parseEther(price)
     const fee = calculateListingFee(priceWei)
     
@@ -72,6 +80,10 @@ export function useReservationMarketplace() {
   }
 
   const buy = async (listingId: string, coordinationTime: number, price: string) => {
+    if (!addresses) {
+      throw new Error('Contract addresses not configured. Please check your environment variables.')
+    }
+    
     const priceWei = parseEther(price)
     const deposit = calculateBuyerDeposit(priceWei)
     
@@ -85,6 +97,10 @@ export function useReservationMarketplace() {
   }
 
   const cancel = async (orderId: string, proof: any) => {
+    if (!addresses) {
+      throw new Error('Contract addresses not configured. Please check your environment variables.')
+    }
+    
     return executeCancellation({
       address: addresses.reservationMarketplace,
       abi,
@@ -94,6 +110,10 @@ export function useReservationMarketplace() {
   }
 
   const claim = async (orderId: string, proof: any) => {
+    if (!addresses) {
+      throw new Error('Contract addresses not configured. Please check your environment variables.')
+    }
+    
     return claimReservation({
       address: addresses.reservationMarketplace,
       abi,

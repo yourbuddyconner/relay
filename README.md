@@ -106,6 +106,33 @@ forge build
 forge test
 ```
 
+## Deployment
+
+### Vercel Deployment (Frontend)
+
+1. **Prerequisites**
+   - Deploy smart contracts to your target network
+   - Deploy or have access to an email relayer service
+   - Obtain a WalletConnect Project ID
+
+2. **Deploy to Vercel**
+   ```bash
+   cd frontend
+   vercel
+   ```
+
+3. **Environment Variables**
+   Set these in your Vercel project settings:
+   - `NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID`
+   - `NEXT_PUBLIC_MOCK_RELAYER_URL`
+   - `NEXT_PUBLIC_CHAIN_ID`
+   - `NEXT_PUBLIC_RPC_URL`
+   - `NEXT_PUBLIC_RESERVATION_MARKETPLACE_ADDRESS`
+   - `NEXT_PUBLIC_RESERVATION_ESCROW_ADDRESS`
+   - `NEXT_PUBLIC_RESERVATION_VERIFIER_ADDRESS`
+
+See `frontend/README.md` for detailed deployment instructions.
+
 ## Smart Contracts
 
 ### Core Contracts

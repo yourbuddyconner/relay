@@ -200,7 +200,7 @@ Create patterns in the [ZK Email Registry](https://registry.zk.email/) for each 
 ### 1. Core Contracts (Built on ZKP2P V2)
 
 ```solidity
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.19;
 
 import "@zkp2p/escrow/contracts/EscrowManager.sol";

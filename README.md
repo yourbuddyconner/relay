@@ -102,4 +102,4 @@ forge test
 
 ## License
 
-MIT 
+Currently unlicensed. All rights reserved. 

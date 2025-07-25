@@ -10,12 +10,12 @@ via_ir = true
 [dependencies]
 forge-std = "forge-std/1.9.3"
 openzeppelin-contracts = "openzeppelin/openzeppelin-contracts@v5.0.2"
-zk-email-contracts = "zkemail/zk-email-verify@v6.1.5"
+zk-email-contracts = "zkemail/zk-email-verify@v6.4.2"
 
 [profile.remappings]
 "@std/" = "lib/forge-std/src/"
 "@openzeppelin/" = "lib/openzeppelin-contracts/"
-"@zk-email/" = "lib/zk-email-contracts/"
+"@zk-email/" = "lib/zk-email-verify/"
 
 [fuzz]
 runs = 256

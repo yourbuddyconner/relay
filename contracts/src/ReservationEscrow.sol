@@ -40,4 +40,51 @@ contract ReservationEscrow {
     event SettlementCompleted(bytes32 indexed orderId, SettlementType outcome);
     
     enum SettlementType { Success, Sniped, Failed, Timeout }
+    
+    // Setter functions
+    function createListing(
+        bytes32 listingId,
+        address seller,
+        bytes32 reservationHash,
+        uint256 price,
+        uint256 escrowAmount,
+        uint64 expiry,
+        string memory platform
+    ) external {
+        listings[listingId] = ReservationListing({
+            seller: seller,
+            reservationHash: reservationHash,
+            price: price,
+            escrowAmount: escrowAmount,
+            expiry: expiry,
+            status: ListingStatus.Active,
+            platform: platform
+        });
+    }
+    
+    function updateListingStatus(bytes32 listingId, ListingStatus status) external {
+        listings[listingId].status = status;
+    }
+    
+    function createOrder(
+        bytes32 orderId,
+        address buyer,
+        bytes32 listingId,
+        uint256 depositAmount,
+        uint64 coordinationTime,
+        uint64 claimDeadline
+    ) external {
+        orders[orderId] = ReservationOrder({
+            buyer: buyer,
+            listingId: listingId,
+            depositAmount: depositAmount,
+            coordinationTime: coordinationTime,
+            claimDeadline: claimDeadline,
+            status: OrderStatus.Coordinating
+        });
+    }
+    
+    function updateOrderStatus(bytes32 orderId, OrderStatus status) external {
+        orders[orderId].status = status;
+    }
 } 

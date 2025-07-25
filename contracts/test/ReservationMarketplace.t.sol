@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.26;
 
-import "@std/Test.sol";
+import "forge-std/Test.sol";
 import "../src/ReservationMarketplace.sol";
 import "../src/ReservationEscrow.sol";
 import "../src/ReservationVerifier.sol";

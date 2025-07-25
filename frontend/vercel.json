@@ -4,12 +4,6 @@
   "outputDirectory": ".next",
   "installCommand": "pnpm install",
   "regions": ["iad1"],
-  "env": {
-    "NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID": "@wallet_connect_project_id",
-    "NEXT_PUBLIC_MOCK_RELAYER_URL": "@mock_relayer_url",
-    "NEXT_PUBLIC_CHAIN_ID": "@chain_id",
-    "NEXT_PUBLIC_RPC_URL": "@rpc_url"
-  },
   "build": {
     "env": {
       "NEXT_TELEMETRY_DISABLED": "1"

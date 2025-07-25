@@ -156,4 +156,9 @@ body {
 /* Smooth scroll behavior */
 html {
   scroll-behavior: smooth;
+}
+
+/* Subtle glow for gradient text */
+.gradient-text {
+  filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.3));
 } 

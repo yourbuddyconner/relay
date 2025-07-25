@@ -3,7 +3,7 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useAccount } from 'wagmi'
 import { useState, useEffect } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 
 export default function Home() {
   const { isConnected } = useAccount()
@@ -14,9 +14,21 @@ export default function Home() {
   const backgroundY = useTransform(scrollY, [0, 500], [0, 150])
   const heroY = useTransform(scrollY, [0, 500], [0, -50])
 
+  // Rotating words for the animation - focused list
+  const words = ['Tee Time', 'Table', 'Reservation', 'Experience', 'Booking', 'Campsite']
+  const [currentWordIndex, setCurrentWordIndex] = useState(0)
+
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentWordIndex((prev) => (prev + 1) % words.length)
+    }, 3000) // Change word every 3 seconds for better readability
+
+    return () => clearInterval(interval)
+  }, [words.length])
 
   if (!mounted) return null
 
@@ -42,6 +54,19 @@ export default function Home() {
       opacity: 1,
       transition: { staggerChildren: 0.1 }
     }
+  }
+
+  // Simple fade animation - clean and readable
+  const wordVariants = {
+    enter: {
+      opacity: 0,
+    },
+    center: {
+      opacity: 1,
+    },
+    exit: {
+      opacity: 0,
+    },
   }
 
   return (
@@ -104,21 +129,42 @@ export default function Home() {
               className="inline-flex items-center space-x-2 bg-purple-500/10 border border-purple-500/20 rounded-full px-4 py-2 text-sm"
             >
               <span className="animate-pulse">🔥</span>
-              <span className="text-purple-300">The future of restaurant reservations is here</span>
+              <span className="text-purple-300">The future of reservations is here</span>
             </motion.div>
             
             <motion.h2 
               variants={fadeInUp}
               className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight"
             >
-              Never Miss Out on
-              <br />
-              <span className="gradient-text">That Perfect Table</span>
+              <span className="block">Never Miss Out on</span>
+              <span className="block mt-2">
+                That Perfect{' '}
+                <span className="inline-block relative w-[200px] sm:w-[250px] md:w-[300px] lg:w-[350px]">
+                  <AnimatePresence mode="wait">
+                    <motion.span
+                      key={currentWordIndex}
+                      variants={wordVariants}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                      transition={{
+                        duration: 0.3,
+                        ease: "easeInOut",
+                      }}
+                      className="gradient-text absolute left-0 top-0"
+                    >
+                      {words[currentWordIndex]}
+                    </motion.span>
+                  </AnimatePresence>
+                  {/* Invisible text to maintain width */}
+                  <span className="invisible">Appointment</span>
+                </span>
+              </span>
             </motion.h2>
             
             <motion.p 
               variants={fadeInUp}
-              className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed px-4 sm:px-0"
+              className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed px-4 sm:px-0 mt-8"
             >
               The first decentralized marketplace where people can safely buy and sell restaurant reservations. 
               Powered by zero-knowledge proofs for complete privacy and security.

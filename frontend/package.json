@@ -3,20 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -H 0.0.0.0",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@rainbow-me/rainbowkit": "^2.2.8",
+    "@tanstack/react-query": "^5.51.1",
     "@zk-email/sdk": "^1.0.3",
+    "ethers": "^6.13.1",
+    "framer-motion": "^12.23.9",
     "next": "14.2.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "ethers": "^6.13.1",
-    "wagmi": "^2.11.0",
     "viem": "^2.17.0",
-    "@tanstack/react-query": "^5.51.1"
+    "wagmi": "^2.11.0"
   },
   "devDependencies": {
     "@types/node": "^20.14.10",
@@ -30,4 +32,4 @@
     "typescript": "^5.5.3"
   },
   "packageManager": "pnpm@9.5.0"
-} 
+}

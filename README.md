@@ -2,6 +2,36 @@
 
 Relay enables secure trading of restaurant reservations using ZK Email proofs for verification and ZKP2P V2's escrow infrastructure for trustless settlement.
 
+## Quick Start
+
+```bash
+# Prerequisites: Docker, Docker Compose, Foundry, Just
+cargo install just
+
+# Start full development environment
+just dev-full
+```
+
+This starts:
+- Local Anvil blockchain (Docker)
+- Smart contracts deployment (local) 
+- Mock email relayer (Docker)
+- Frontend (Docker with hot reload)
+
+Access the app at http://localhost:3000
+
+**To stop all services:** Press `Ctrl+C` or run `just stop`
+
+### Alternative Commands
+
+```bash
+just dev          # Start all services with docker-compose
+just dev-detached # Start in background
+just logs         # View logs
+just stop         # Stop all services
+just reset        # Clean everything and start fresh
+```
+
 ## Architecture
 
 The platform combines:
@@ -17,6 +47,8 @@ relay/
 │   ├── src/           # Contract source files
 │   ├── test/          # Contract tests
 │   └── script/        # Deployment scripts
+├── crates/            # Rust workspace
+│   └── mock-relayer/  # Mock email relayer service
 ├── frontend/          # Next.js application
 │   ├── src/
 │   │   ├── app/       # Next.js app router pages
@@ -24,16 +56,19 @@ relay/
 │   │   ├── hooks/     # Custom React hooks
 │   │   └── lib/       # Utility functions
 │   └── public/        # Static assets
-└── docs/              # Documentation
+├── docs/              # Documentation
+├── Cargo.toml         # Rust workspace configuration
+└── justfile           # Development commands
 ```
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 18+
-- pnpm
-- Foundry
+- Docker & Docker Compose
+- Foundry (for contract deployment)
+- Just (`cargo install just`)
+- Rust (optional, only for local development without Docker)
 
 ### Installation
 

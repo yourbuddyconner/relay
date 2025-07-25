@@ -1,0 +1,22 @@
+{
+  "name": "relay",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Decentralized restaurant reservation marketplace",
+  "scripts": {
+    "dev:local": "npm run deploy:local && cd frontend && npm run dev",
+    "deploy:local": "./scripts/deploy-local.sh",
+    "dev:reset": "pkill anvil || true && rm -rf contracts/cache contracts/out && npm run dev:local",
+    "test:contracts": "cd contracts && forge test",
+    "test:e2e:local": "echo 'E2E tests not yet implemented'",
+    "anvil": "cd contracts && anvil --block-time 1 --accounts 10 --balance 10000",
+    "frontend": "cd frontend && npm run dev",
+    "build": "cd contracts && forge build && cd ../frontend && npm run build"
+  },
+  "workspaces": [
+    "frontend"
+  ],
+  "devDependencies": {
+    "@types/node": "^20.14.10"
+  }
+} 

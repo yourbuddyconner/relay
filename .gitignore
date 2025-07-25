@@ -49,3 +49,9 @@ contracts/cache_forge/
 # OS
 .DS_Store
 Thumbs.db
+
+# Rust
+target/
+Cargo.lock
+**/*.rs.bk
+*.pdb

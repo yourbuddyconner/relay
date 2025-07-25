@@ -1,0 +1,51 @@
+services:
+  # Local blockchain
+  anvil:
+    image: ghcr.io/foundry-rs/foundry:latest
+    command: anvil --host 0.0.0.0 --block-time 1 --accounts 10 --balance 10000
+    ports:
+      - "8545:8545"
+    healthcheck:
+      test: cast block-number --rpc-url http://localhost:8545
+      interval: 2s
+      timeout: 5s
+      retries: 5
+
+  # Mock email relayer
+  mock-relayer:
+    build:
+      context: .
+      dockerfile: crates/mock-relayer/Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - RUST_LOG=debug
+      - HOST=0.0.0.0
+    healthcheck:
+      test: curl -f http://localhost:3001/health || exit 1
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # Frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile.dev
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_CHAIN_ID=31337
+      - NEXT_PUBLIC_RPC_URL=http://localhost:8545
+      - NEXT_PUBLIC_MOCK_RELAYER_URL=http://localhost:3001
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+      - ./frontend/next.config.js:/app/next.config.js
+      - ./frontend/tsconfig.json:/app/tsconfig.json
+      - ./frontend/tailwind.config.js:/app/tailwind.config.js
+      - ./frontend/postcss.config.js:/app/postcss.config.js
+
+networks:
+  default:
+    name: relay-network 

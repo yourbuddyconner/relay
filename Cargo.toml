@@ -1,0 +1,36 @@
+[workspace]
+members = [
+    "crates/*",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+authors = ["Relay Protocol Team"]
+edition = "2021"
+license = "MIT"
+repository = "https://github.com/relay-protocol/relay"
+
+[workspace.dependencies]
+# Common dependencies
+tokio = { version = "1.38", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+axum = "0.7"
+tower = "0.4"
+tower-http = { version = "0.5", features = ["cors", "trace"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+anyhow = "1.0"
+thiserror = "1.0"
+dotenv = "0.15"
+
+# Ethereum/Web3
+ethers = "2.0"
+hex = "0.4"
+
+# HTTP Client
+reqwest = { version = "0.12", features = ["json"] }
+
+# Time
+chrono = { version = "0.4", features = ["serde"] } 

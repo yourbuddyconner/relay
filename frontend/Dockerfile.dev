@@ -1,0 +1,36 @@
+FROM node:20-alpine
+
+# Install Python and build tools for native dependencies
+RUN apk add --no-cache python3 make g++ py3-pip
+
+# Install pnpm with specific version
+RUN corepack enable && corepack prepare pnpm@9.5.0 --activate
+
+WORKDIR /app
+
+# Configure pnpm to work better in Docker
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN mkdir -p /pnpm
+
+# Copy workspace configuration and package files
+COPY pnpm-workspace.yaml ./
+COPY package.json ./
+COPY pnpm-lock.yaml ./
+COPY frontend/package.json ./frontend/package.json
+
+# Configure pnpm store and install dependencies (without frozen-lockfile for development)
+RUN pnpm config set store-dir /pnpm/store && \
+    pnpm install --prefer-offline
+
+# Set working directory to frontend
+WORKDIR /app/frontend
+
+# Copy the frontend application
+COPY frontend/ ./
+
+# Expose port
+EXPOSE 3000
+
+# Start development server
+CMD ["pnpm", "dev"] 
